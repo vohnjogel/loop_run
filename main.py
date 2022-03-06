@@ -8,11 +8,24 @@ import tkinter as tk
 from tkinter import *
 import overpy
 from haversine import haversine, inverse_haversine, Direction, Unit
+import sys
+import os
 
 
 api_key = 'Air2eVsMuWPALfj-EVx62avI4ZjcTD86eOQAKFC7IfJpVzw9WCii7ycjX-0qN6ra'
 slo_coords = [35.2853287, -120.6589948]
 start_coords_ints = {}  # dict of starting coordinates sets with associated intersection lists
+
+
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 # get intersections from geojson file
@@ -255,7 +268,7 @@ def err_start():
 
 
 def run_program(start, distance):
-    filename = 'slo_ints.geojson'
+    filename = resource_path('slo_ints.geojson')
     start_coords = get_coords(start)
 
     if start_coords == -1:
