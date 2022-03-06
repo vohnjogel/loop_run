@@ -17,6 +17,8 @@ slo_coords = [35.2853287, -120.6589948]
 start_coords_ints = {}  # dict of starting coordinates sets with associated intersection lists
 
 
+# from user max at https://stackoverflow.com/questions/7674790/bundling-data-files-with-pyinstaller-onefile/13790741
+# #13790741
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
     try:
