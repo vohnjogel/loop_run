@@ -17,6 +17,14 @@ slo_coords = [35.2853287, -120.6589948]
 start_coords_ints = {}  # dict of starting coordinates sets with associated intersection lists
 
 
+def err_start():
+    root = Tk()
+    text = Text(root)
+    text.insert(INSERT, 'ERROR: Invalid starting location')
+    text.pack()
+    root.mainloop()
+
+
 # from user max at https://stackoverflow.com/questions/7674790/bundling-data-files-with-pyinstaller-onefile/13790741
 # #13790741
 def resource_path(relative_path):
@@ -28,22 +36,6 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
-
-
-# get intersections from geojson file
-def get_ints_file(filename):
-    f = open(filename, 'r')
-    ints_json = json.load(f)
-    df_ints = pd.json_normalize(ints_json['features'])
-
-    # extract latitude and longitude as separate columns in dataframe
-    for i in df_ints.index:
-        df_ints.at[i, 'lon'] = df_ints.loc[i]['geometry.coordinates'][0]
-        df_ints.at[i, 'lat'] = df_ints.loc[i]['geometry.coordinates'][1]
-
-    df_ints = df_ints[['lon', 'lat']]   # remove unnecessary columns
-
-    return df_ints
 
 
 # check previously used starting coordinates to see if a suitable intersection set exists
@@ -136,6 +128,22 @@ def get_ints_coords(start_coords):
     start_coords_ints[str(start_coords)] = df_ints_new
 
     return df_ints_new
+
+
+# get intersections from geojson file
+def get_ints_file(filename):
+    f = open(filename, 'r')
+    ints_json = json.load(f)
+    df_ints = pd.json_normalize(ints_json['features'])
+
+    # extract latitude and longitude as separate columns in dataframe
+    for i in df_ints.index:
+        df_ints.at[i, 'lon'] = df_ints.loc[i]['geometry.coordinates'][0]
+        df_ints.at[i, 'lat'] = df_ints.loc[i]['geometry.coordinates'][1]
+
+    df_ints = df_ints[['lon', 'lat']]   # remove unnecessary columns
+
+    return df_ints
 
 
 # given a street address, return the address's latitude and longitude
@@ -259,14 +267,6 @@ def gen_route(waypoints):
     # print(url)
 
     webbrowser.open(url)
-
-
-def err_start():
-    root = Tk()
-    text = Text(root)
-    text.insert(INSERT, 'ERROR: Invalid starting location')
-    text.pack()
-    root.mainloop()
 
 
 def run_program(start, distance):
